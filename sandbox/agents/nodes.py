@@ -120,47 +120,6 @@ llm_w_tools = llm.bind_tools(mcp_tools)
 sandbox_tool_node = ToolNode(mcp_tools)
 
 
-# ---------------------------------------------------------------------------
-# Agent Nodes
-# ---------------------------------------------------------------------------
-
-# def coder_node(state: AgentState) -> AgentState:
-#     """Generates Python code based on task prompt or validator feedback."""
-#     prompt = state['user_prompt']
-#     feedback = state.get("feedback")
-#     iteration = state.get('iteration_count', 0)
-
-#     system_prompt = (
-#         "You are the Coder Agent for SecAnt.\n"
-#         "Your duty is to write clean, secure, and executable Python code to solve the user prompt.\n"
-#         "You MUST invoke the code execution tool to run your code inside the sandbox environment.\n"
-#         "Pass raw Python source code directly into the tool's 'code' parameter.\n"
-#         "Do NOT format the tool parameter with markdown code fences (e.g. ```python)."
-#     )
-#     messages = [SystemMessage(content=system_prompt)]
-
-#     if feedback and not feedback.get("is_successful"):
-#         user_msg = (
-#             f"Task: {prompt}\n\n"
-#             f"Previous Execution Failed (Attempt {iteration}/{state.get('max_retries', 3)}).\n"
-#             f"Error Summary: {feedback.get('error_summary')}\n"
-#             f"Suggested Fix: {feedback.get('suggested_fix')}\n"
-#             f"Raw Stderr: {feedback.get('stderr')}\n\n"
-#             "Please fix the implementation and return updated Python code."
-#         )
-#     else:
-#         user_msg = f"Write Python code to solve this task: {prompt}"
-
-#     messages.append(HumanMessage(content=user_msg))
-
-#     response: AIMessage = llm_w_tools.invoke(messages)
-
-#     if response.tool_calls:
-#         state["generated_code"] = response.tool_calls[0]["args"].get("code", "")
-
-#     state["messages"] = state.get("messages", []) + [response]
-#     state["iteration_count"] = iteration + 1
-#     return state
 def coder_node(state: AgentState) -> AgentState:
     """Generates Python code based on task prompt or validator feedback."""
     prompt = state['user_prompt']
