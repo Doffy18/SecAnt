@@ -265,6 +265,18 @@ While **SecAnt** currently provides a robust 5-level security harness and self-c
 - **Automated Safety Benchmarking (Ragas Pipeline):** Integrate programmatic evaluation datasets using **Ragas** to continuously score Faithfulness and Answer Relevancy across new LLM releases and system prompt iterations.
 - **Multi-Language Execution Engine:** Extend sandbox runner support beyond Python to include Node.js, Go, and Rust runtimes under the same multi-layered security architecture.
 
+---
+
 ## Conclusion
 
 **SecAnt** demonstrates how enterprise agentic tools can safely bridge the gap between autonomous code generation and system-level execution. By shifting away from naive code evaluation and implementing a zero-trust model—combining pre-flight static inspection, ephemeral container isolation, self-correcting agent loops, and post-execution constitutional auditing—SecAnt proves that autonomous AI capabilities do not have to come at the expense of infrastructure security.
+
+---
+
+## Relevant Docs
+1. https://docker-py.readthedocs.io/en/stable/containers.html
+2. https://docs.docker.com/engine/containers/resource_constraints/
+3. https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+4. https://docs.python.org/3/library/ast.html
+5. https://docs.langchain.com/oss/python/langchain/overview
+6. https://docs.langchain.com/oss/python/langgraph/overview
