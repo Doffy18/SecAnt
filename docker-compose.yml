@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  secant-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: secant_gateway_api
+    command: uvicorn sandbox.gateway:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-true}
+      - LANGCHAIN_ENDPOINT=${LANGCHAIN_ENDPOINT:-https://api.smith.langchain.com}
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}
+      - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-SecAnt-Sandbox}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  secant-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: secant_streamlit_ui
+    command: python -m streamlit run sandbox/app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+      # Point Streamlit requests to the gateway service inside the Docker network
+      - GATEWAY_URL=http://secant-gateway:8000
+    depends_on:
+      secant-gateway:
+        condition: service_healthy
+    restart: unless-stopped
